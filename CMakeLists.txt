@@ -66,4 +66,8 @@ if (BUILD_WITH_TM2)
     add_tm2()
 endif()
 
+if (BUILD_WITH_FFMPEG)
+  include(CMake/ffmpeg_config.cmake)
+endif()
+
 include(CMake/install_config.cmake)

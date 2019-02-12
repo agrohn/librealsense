@@ -4,7 +4,7 @@
 #include "profile.h"
 #include "media/record/record_device.h"
 #include "media/ros/ros_writer.h"
-
+#include "media/ffmpeg/ffmpeg_writer.h"
 namespace librealsense
 {
     namespace pipeline
@@ -19,7 +19,15 @@ namespace librealsense
                 if (!dev)
                     throw librealsense::invalid_value_exception("Failed to create a profile, device is null");
 
-                _dev = std::make_shared<record_device>(dev, std::make_shared<ros_writer>(to_file, dev->compress_while_record()));
+                if ( _to_file.find_last_of(".bag" ) == to_file.length()-1 )
+                {
+                  _dev = std::make_shared<record_device>(dev, std::make_shared<ros_writer>(to_file, dev->compress_while_record()));
+                }
+                else // use ffmpeg_writer
+                {
+                  _dev = std::make_shared<record_device>(dev, std::make_shared<ffmpeg_writer>(to_file));
+                }
+
             }
             _multistream = config.resolve(_dev.get());
         }

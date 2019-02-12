@@ -12,6 +12,7 @@
 #include "core/extension.h"
 #include "media/record/record_device.h"
 #include <media/ros/ros_writer.h>
+#include <media/ffmpeg/ffmpeg_writer.h>
 #include <media/ros/ros_reader.h>
 #include "core/advanced_mode.h"
 #include "source.h"
@@ -1245,11 +1246,15 @@ rs2_device* rs2_create_record_device_ex(const rs2_device* device, const char* fi
 {
     VALIDATE_NOT_NULL(device);
     VALIDATE_NOT_NULL(file);
-
+    std::string tmp = file;
+    bool useFFmpeg = (tmp.find_last_of(".mp4") == tmp.length()-1);
     return new rs2_device({
         device->ctx,
         device->info,
-        std::make_shared<record_device>(device->device, std::make_shared<ros_writer>(file, compression_enabled))
+        (useFFmpeg ?
+         (std::make_shared<record_device>(device->device, std::make_shared<ffmpeg_writer>(file))) :
+         (std::make_shared<record_device>(device->device, std::make_shared<ros_writer>(file, compression_enabled)))
+         ) 
         });
 }
 HANDLE_EXCEPTIONS_AND_RETURN(nullptr, device, file)

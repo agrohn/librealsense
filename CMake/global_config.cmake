@@ -57,6 +57,9 @@ macro(global_set_flags)
         include(CMake/cuda_config.cmake)
     endif()
 
+    
+    SET(LIBS ${LIBS} ${ALL_CUDA_LIBS})
+    
     add_definitions(-D${BACKEND} -DUNICODE)
 endmacro()
 

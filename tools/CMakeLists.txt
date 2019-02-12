@@ -14,7 +14,8 @@ option(BUILD_GRAPHICAL_EXAMPLES "Build graphical examples." ON)
 
 if(BUILD_GRAPHICAL_EXAMPLES)
     include(${CMAKE_SOURCE_DIR}/CMake/opengl_config.cmake)
-else()
+
+  else()
     if(ANDROID_NDK_TOOLCHAIN_INCLUDED)
         find_library(log-lib log)
         set(DEPENDENCIES realsense2 log)
@@ -26,6 +27,11 @@ else()
     endif()
 endif()
 
+if ( BUILD_WITH_FFMPEG )
+  include(${CMAKE_SOURCE_DIR}/CMake/ffmpeg_config.cmake)
+  list(APPEND DEPENDENCIES ${FFMPEG_LIBRARIES})
+endif()
+  
 add_subdirectory(terminal)
 add_subdirectory(fw-logger)
 add_subdirectory(enumerate-devices)
