@@ -50,15 +50,15 @@ namespace librealsense
 
       // a wrapper around a single output AVStream
       typedef struct OutputStream {
-        AVStream *st;
-        AVCodecContext *enc;
+        AVStream *st{nullptr};
+        AVCodecContext *enc{nullptr};
         
         /* pts of the next frame that will be generated */
-        int64_t next_pts;
-        int samples_count;
+        int64_t next_pts{0};
+        int samples_count{0};
         
-        AVFrame *frame;
-        AVFrame *tmp_frame;
+        AVFrame *frame{nullptr};
+        AVFrame *tmp_frame{nullptr};
         
         float t, tincr, tincr2;
         
@@ -67,8 +67,8 @@ namespace librealsense
       } OutputStream;
     private:
       OutputStream video_st;
-      AVOutputFormat *fmt;
-      AVFormatContext *oc;
+      AVOutputFormat *fmt{nullptr};
+      AVFormatContext *oc{nullptr};
       AVCodec *video_codec{nullptr};
       int ret;
       AVDictionary *opt = NULL;
